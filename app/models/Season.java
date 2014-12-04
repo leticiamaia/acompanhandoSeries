@@ -1,6 +1,7 @@
 package models;
 
 import javax.persistence.*;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -9,25 +10,26 @@ import java.util.List;
 @Entity(name = "Season")
 public class Season {
     @Id
-    @SequenceGenerator(name = "EPISODE_SEQUENCE", sequenceName = "EPISODE_SEQUENCE", allocationSize = 1, initialValue = 0)
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue
     private Long id;
 
+    @Column
     private int number;
-    private List<Episode> espisodes;
-    public enum State {
-        UNWATCHED,
-        WATCHING,
-        FINISHED,
-    }
 
-    public Season(int number, List<Episode> espisodes) {
+    @ManyToOne(cascade = CascadeType.ALL)
+    private TVShow tvShow;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name="EPISODES")
+    private List<Episode> espisodes;
+
+    public Season(int number, TVShow tvShow) {
         this.number = number;
-        this.espisodes = espisodes;
+        this.tvShow = tvShow;
+        espisodes = new LinkedList<Episode>();
     }
 
     public Season() {
-
     }
 
     public List<Episode> getEspisodes() {
@@ -46,4 +48,25 @@ public class Season {
     public void setNumber(int number) {
         this.number = number;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public TVShow getTvShow() {
+        return tvShow;
+    }
+
+    public void setTvShow(TVShow tvShow) {
+        this.tvShow = tvShow;
+    }
+
+    public void addEpisode(Episode episode) {
+        espisodes.add(episode);
+    }
+
 }

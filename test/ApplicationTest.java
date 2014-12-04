@@ -3,7 +3,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import base.AbstractTest;
 import com.fasterxml.jackson.databind.JsonNode;
+import models.FileHandler;
+import models.TVShow;
+import models.dao.GenericDAO;
+import models.dao.GenericDAOImpl;
 import org.junit.*;
 
 import play.mvc.*;
@@ -25,7 +30,7 @@ import static org.fest.assertions.Assertions.*;
 * If you are interested in mocking a whole application, see the wiki for more details.
 *
 */
-public class ApplicationTest {
+public class ApplicationTest extends AbstractTest{
 
     @Test
     public void simpleCheck() {
@@ -34,11 +39,9 @@ public class ApplicationTest {
     }
 
     @Test
-    public void renderTemplate() {
-        Content html = views.html.index.render("Your new application is ready.");
-        assertThat(contentType(html)).isEqualTo("text/html");
-        assertThat(contentAsString(html)).contains("Your new application is ready.");
+    public void shouldStartDatabaseWithManySeries() {
+        List<TVShow> tvShows = dao.findAllByClassName(TVShow.class.getName());
+        assertThat(tvShows.size()).isNotEqualTo(0);
     }
-
 
 }

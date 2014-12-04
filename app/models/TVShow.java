@@ -1,6 +1,7 @@
 package models;
 
 import javax.persistence.*;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -9,17 +10,40 @@ import java.util.List;
 
 @Entity(name = "TVShow")
 public class TVShow {
-    @Id
-    @SequenceGenerator(name = "TVShow_SEQUENCE", sequenceName = "TVShow_SEQUENCE", allocationSize = 1, initialValue = 0)
-    @GeneratedValue(strategy = GenerationType.TABLE)
+   @Id
+   @GeneratedValue
     private Long id;
 
+    @Column
     private String name;
+
+    @JoinColumn(name="SEASON")
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Season> seasons;
 
-    public TVShow(String name, List<Season> seasons) {
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    @Column
+    private int status;
+
+    public TVShow(String name) {
         this.name = name;
-        this.seasons = seasons;
+        seasons = new LinkedList<Season>();
+        status = 0;
     }
 
 
@@ -41,5 +65,9 @@ public class TVShow {
 
     public void setSeasons(List<Season> seasons) {
         this.seasons = seasons;
+    }
+
+    public void addSeason(Season season) {
+        seasons.add(season);
     }
 }
