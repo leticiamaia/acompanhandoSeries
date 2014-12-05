@@ -16,36 +16,34 @@ import java.util.List;
  */
 public class FileHandler {
 
-    public static List<String[]> read() {
+    public static void read() {
         String csvFile = Play.application().getFile("/app/assets/seriesFinalFile.csv").getAbsolutePath();
         BufferedReader reader = null;
         String line = "";
         String splitBy = ",";
-        List<String[]> lines = new LinkedList<String[]>();
         try {
             reader = new BufferedReader(new FileReader(csvFile));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         try {
-            populateDatabase(reader, splitBy, lines);
+            populateDatabase(reader, splitBy);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return lines;
     }
 
-    private static void populateDatabase(BufferedReader reader, String splitBy, List<String[]> lines) throws IOException {
+    private static void populateDatabase(BufferedReader reader, String splitBy) throws IOException {
         GenericDAO dao = new GenericDAOImpl();
         String line = reader.readLine();
         String[] args = line.split(splitBy);
         String tvShowName = args[0];
         int seasonNumber = Integer.parseInt(args[1]);
         int episodeNumber = Integer.parseInt(args[2]);
-        String episodeName = args[2];
+        String episodeName = args[3];
         TVShow show = new TVShow(tvShowName);
         Season season = new Season(seasonNumber, show);
-        Episode episode = new Episode(episodeName,episodeNumber,season,show);
+        Episode episode = new Episode(episodeName,episodeNumber,season);
         season.addEpisode(episode);
         show.addSeason(season);
 
@@ -62,10 +60,11 @@ public class FileHandler {
 
             if(tvShowName.equals(show.getName())) {
                 if(seasonNumber == season.getNumber()) {
-                    episode = new Episode(episodeName,episodeNumber,season,show);
+                    episode = new Episode(episodeName,episodeNumber,season);
+                    season.addEpisode(episode);
                 } else {
                     season = new Season(seasonNumber, show);
-                    episode = new Episode(episodeName,episodeNumber,season,show);
+                    episode = new Episode(episodeName,episodeNumber,season);
                     season.addEpisode(episode);
                     show.addSeason(season);
                 }
@@ -74,7 +73,7 @@ public class FileHandler {
                 dao.flush();
                 show = new TVShow(tvShowName);
                 season = new Season(seasonNumber, show);
-                episode = new Episode(episodeName,episodeNumber,season,show);
+                episode = new Episode(episodeName,episodeNumber,season);
                 season.addEpisode(episode);
                 show.addSeason(season);
             }

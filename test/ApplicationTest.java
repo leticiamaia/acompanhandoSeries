@@ -1,26 +1,11 @@
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import base.AbstractTest;
-import com.fasterxml.jackson.databind.JsonNode;
-import models.FileHandler;
+import models.Episode;
+import models.Season;
 import models.TVShow;
-import models.dao.GenericDAO;
-import models.dao.GenericDAOImpl;
 import org.junit.*;
 
-import play.mvc.*;
-import play.test.*;
-import play.data.DynamicForm;
-import play.data.validation.ValidationError;
-import play.data.validation.Constraints.RequiredValidator;
-import play.i18n.Lang;
-import play.libs.F;
-import play.libs.F.*;
-
-import static play.test.Helpers.*;
 import static org.fest.assertions.Assertions.*;
 
 
@@ -42,6 +27,77 @@ public class ApplicationTest extends AbstractTest{
     public void shouldStartDatabaseWithManySeries() {
         List<TVShow> tvShows = dao.findAllByClassName(TVShow.class.getName());
         assertThat(tvShows.size()).isNotEqualTo(0);
+    }
+
+
+    @Test
+    public void shouldUpdateSeriesToFollowingInDatabase() {
+        TVShow show = new TVShow("Show");
+        dao.persist(show);
+
+        TVShow show1 = dao.findByEntityId(TVShow.class, show.getId());
+        assertThat(show1.isFollowing()).isEqualTo(false);
+        show1.setFollowing(true);
+        dao.merge(show1);
+
+        show1 = dao.findByEntityId(TVShow.class, show.getId());
+        assertThat(show1.isFollowing()).isEqualTo(true);
+    }
+
+    @Test
+    public void shouldUpdateEpisodeToWatchedInDatabase() {
+        TVShow show = new TVShow("Show");
+        Season season = new Season(1, show);
+        Episode episode = new Episode("Episode",1,season);
+        season.addEpisode(episode);
+        show.addSeason(season);
+        dao.persist(show);
+
+        Episode episode1 = dao.findByEntityId(Episode.class, episode.getId());
+        assertThat(episode1.isWatched()).isEqualTo(false);
+        episode1.setWatched(true);
+        dao.merge(episode1);
+
+        episode1 = dao.findByEntityId(Episode.class, episode.getId());
+        assertThat(episode1.isWatched()).isEqualTo(true);
+    }
+
+    @Test
+    public void shouldUpdateSeasonStatusToWatchingInDatabase() {
+        TVShow show = new TVShow("Show");
+        Season season = new Season(1, show);
+        Episode episode = new Episode("Episode",1,season);
+        Episode episode0 = new Episode("Episode0",1,season);
+        season.addEpisode(episode);
+        season.addEpisode(episode0);
+        show.addSeason(season);
+        dao.persist(show);
+
+        Episode episode1 = dao.findByEntityId(Episode.class, episode.getId());
+        assertThat(episode1.getSeason().getStatus()).isEqualTo(0);
+        episode1.setWatched(true);
+        dao.merge(episode1);
+
+        episode1 = dao.findByEntityId(Episode.class, episode.getId());
+        assertThat(episode1.getSeason().getStatus()).isEqualTo(1);
+    }
+
+    @Test
+    public void shouldUpdateSeasonStatusToWatchedInDatabase() {
+        TVShow show = new TVShow("Show");
+        Season season = new Season(1, show);
+        Episode episode = new Episode("Episode",1,season);
+        season.addEpisode(episode);
+        show.addSeason(season);
+        dao.persist(show);
+
+        Episode episode1 = dao.findByEntityId(Episode.class, episode.getId());
+        assertThat(episode1.getSeason().getStatus()).isEqualTo(0);
+        episode1.setWatched(true);
+        dao.merge(episode1);
+
+        episode1 = dao.findByEntityId(Episode.class, episode.getId());
+        assertThat(episode1.getSeason().getStatus()).isEqualTo(2);
     }
 
 }

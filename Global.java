@@ -13,12 +13,7 @@ public class Global extends GlobalSettings {
         JPA.withTransaction(new play.libs.F.Callback0() {
             @Override
             public void invoke() throws Throwable {
-               List<String[]> lines = FileHandler.read();
-                //FileHandler.populateDatabase(lines);
-               /* GenericDAO dao = new GenericDAOImpl();
-                TVShow show = new TVShow("serie1");
-                dao.persist(show);*/
-                //dao.flush();
+               FileHandler.read();
             }
         });
     }

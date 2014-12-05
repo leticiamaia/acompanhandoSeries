@@ -1,10 +1,6 @@
 package models;
 
 import javax.persistence.*;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 
 /**
  * Created by Leticia on 11/27/2014.
@@ -21,20 +17,19 @@ public class Episode {
 
     @Column
     private int number;
+    @Column
+    private boolean watched;
 
     @ManyToOne(cascade = CascadeType.ALL)
     private Season season;
 
-   /* @ManyToOne(cascade = CascadeType.ALL)
-    private TVShow tvShow;*/
 
-    public Episode(String name, int number, Season season, TVShow tvShow) {
+    public Episode(String name, int number, Season season) {
         this.name = name;
         this.number = number;
         this.season = season;
-       // this.tvShow = tvShow;
+        this.watched = false;
     }
-
 
     public Episode() {}
 
@@ -61,4 +56,23 @@ public class Episode {
     public void setNumber(int number) {
         this.number = number;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public boolean isWatched() {
+        return watched;
+    }
+
+    public void setWatched(boolean watched) {
+        season.setNextEpisode(this);
+        this.watched = watched;
+        season.setStatus();
+    }
+
+    public Season getSeason() {
+        return season;
+    }
+
 }

@@ -12,10 +12,14 @@ import java.util.List;
 public class TVShow {
    @Id
    @GeneratedValue
+   @SequenceGenerator(name = "TVSHOW_SEQUENCE", sequenceName = "TVSHOW_SEQUENCE", allocationSize = 1, initialValue = 0)
     private Long id;
 
     @Column
     private String name;
+
+    @Column
+    private boolean following;
 
     @JoinColumn(name="SEASON")
     @OneToMany(cascade = CascadeType.ALL)
@@ -29,21 +33,18 @@ public class TVShow {
         this.id = id;
     }
 
-    public int getStatus() {
-        return status;
+    public boolean isFollowing() {
+        return following;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void setFollowing(boolean following) {
+        this.following = following;
     }
-
-    @Column
-    private int status;
 
     public TVShow(String name) {
         this.name = name;
         seasons = new LinkedList<Season>();
-        status = 0;
+        following = false;
     }
 
 

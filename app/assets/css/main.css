@@ -245,3 +245,11 @@ bt {
 	font-size: 40px;
 	color: deeppink;
 }
+
+.done {
+	background-color:#E0E0E0
+}
+
+.next {
+	color:red
+}
