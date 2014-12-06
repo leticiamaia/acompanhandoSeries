@@ -99,5 +99,4 @@ public class ApplicationTest extends AbstractTest{
         episode1 = dao.findByEntityId(Episode.class, episode.getId());
         assertThat(episode1.getSeason().getStatus()).isEqualTo(2);
     }
-
 }
