@@ -16,20 +16,23 @@ public class Application extends Controller {
 
     @Transactional
     public static Result index() {
-        List<TVShow> tvShows = dao.findAllByClassName(TVShow.class.getName());
+        List<TVShow> tvShows;
+        tvShows = dao.findAllByClassName(TVShow.class.getName());
         List<TVShow> watching = new LinkedList<TVShow>();
-        List<TVShow> watched = new LinkedList<TVShow>();
         List<TVShow> unWatched = new LinkedList<TVShow>();
         for (TVShow show: tvShows) {
             if(!show.isFollowing()) {
                 unWatched.add(show);
-            } else if (show.isFollowing()) {
-                watching.add(show);
             } else {
-                watched.add(show);
+                watching.add(show);
             }
         }
-        return ok(views.html.index.render(unWatched, watching, watched));
+        return ok(views.html.index.render(unWatched, watching));
+    }
+
+    @Transactional
+    public  static Result show() {
+        return redirect(routes.Application.index());
     }
 
     @Transactional

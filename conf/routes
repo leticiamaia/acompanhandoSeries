@@ -3,11 +3,12 @@
 # ~~~~
 
 # Home page
-GET         /                        controllers.Application.index
-POST        /goals/:id/watch        controllers.Application.watch(id: Long)
-POST       /goals/:id/watchEpisode     controllers.Application.watchEpisode(id: Long)
+GET         /                              controllers.Application.index
+GET         /shows                         controllers.Application.show
+POST        /shows/:id/watch               controllers.Application.watch(id: Long)
+POST        /shows/:id/watchEpisode        controllers.Application.watchEpisode(id: Long)
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file            controllers.Assets.at(path="/public", file)
+GET         /assets/*file                  controllers.Assets.at(path="/public", file)
 
     

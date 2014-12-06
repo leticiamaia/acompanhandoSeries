@@ -1,4 +1,4 @@
-@(unwatched: List[TVShow], watching: List[TVShow], watched: List[TVShow])
+@(unwatched: List[TVShow], watching: List[TVShow])
 <html lang="">
     <head>
         <title>Minhas Séries</title>
@@ -38,22 +38,22 @@
                             </form>
                             <br>
                             <ul class="list-group seasons">
-                                @for(season <- show.getSeasons()) {
+                            @for(season <- show.getSeasons()) {
                                 <li class="list-group-item">
                                     <div class="dropdown">
                                         <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
                                             <span class="caret"></span>
                                         </button>
-                                          Temporada @season.getNumber()
+                                        Temporada @season.getNumber()
                                         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                                            @for(episode <- season.getEpisodes()) {
-                                                <li>Episode @episode.getNumber(): @episode.getName</li>
-                                                <li role="presentation" class="divider"></li>
-                                            }
+                                        @for(episode <- season.getEpisodes()) {
+                                            <li>Episode @episode.getNumber(): @episode.getName</li>
+                                            <li role="presentation" class="divider"></li>
+                                        }
                                         </ul>
                                     </div>
                                 </li>
-                                }
+                            }
                             </ul>
                         </li>
                     }
@@ -65,8 +65,8 @@
                     <ul class="list-group">
                     @for(show <- watching) {
                         <li class="list-group-item">
-                        <h4>@show.getName()</h4>
-                        <ul class="list-group seasons">
+                            <h4>@show.getName()</h4>
+                            <ul class="list-group seasons">
                             @for(season <- show.getSeasons()) {
                                 <li class="list-group-item">
                                     <div class="dropdown">
@@ -89,8 +89,11 @@
                                                 <li>
                                                     <form method="post" action="@routes.Application.watchEpisode(episode.getId())">
                                                         @if(episode.equals(season.getNextEpisode)) {
-                                                            <p class="next">Próximo a ser assistido!</p>
-                                                        } Episode @episode.getNumber(): @episode.getName()
+                                                           Próximo a ser assistido! Episode @episode.getNumber(): @episode.getName()
+                                                        }
+                                                        @if(!episode.equals(season.getNextEpisode)) {
+                                                            Episode @episode.getNumber(): @episode.getName()
+                                                        }
                                                         <span class="pull-right">
                                                             <button class="btn btn-xs" type="submit">
                                                                 <span class="glyphicon glyphicon-play-circle"></span>
@@ -113,7 +116,7 @@
                                     </div>
                                 </li>
                             }
-                        </ul>
+                            </ul>
                         </li>
                     }
                     </ul>
@@ -127,4 +130,3 @@
         <script src="@routes.Assets.at("js/script.js")"></script>
     </body>
 </html>
-
