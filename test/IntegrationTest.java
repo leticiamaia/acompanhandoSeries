@@ -16,7 +16,43 @@ public class IntegrationTest {
      * in this example we just check if the welcome page is being shown
      */
     @Test
-    public void test() {
+    public void shouldStartPage() {
+        running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
+            public void invoke(TestBrowser browser) {
+                browser.goTo("http://localhost:3333");
+                assertThat(browser.pageSource()).contains("Minhas Séries");
+            }
+        });
     }
 
+
+    @Test
+    public void shouldStartPageWithShows() {
+        running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
+            public void invoke(TestBrowser browser) {
+                browser.goTo("http://localhost:3333");
+                assertThat(browser.pageSource()).contains("South Park");
+            }
+        });
+    }
+
+    @Test
+    public void shouldStartPageWithSeason() {
+        running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
+            public void invoke(TestBrowser browser) {
+                browser.goTo("http://localhost:3333");
+                assertThat(browser.pageSource()).contains("1");
+            }
+        });
+    }
+
+    @Test
+    public void shouldStartPageWithEpisodes() {
+        running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
+            public void invoke(TestBrowser browser) {
+                browser.goTo("http://localhost:3333");
+                assertThat(browser.pageSource()).contains("Cartman Gets an Anal Probe");
+            }
+        });
+    }
 }

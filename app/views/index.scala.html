@@ -47,7 +47,7 @@
                                         Temporada @season.getNumber()
                                         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
                                         @for(episode <- season.getEpisodes()) {
-                                            <li>Episode @episode.getNumber(): @episode.getName</li>
+                                            <li>Episídio @episode.getNumber(): @episode.getName</li>
                                             <li role="presentation" class="divider"></li>
                                         }
                                         </ul>
@@ -89,10 +89,10 @@
                                                 <li>
                                                     <form method="post" action="@routes.Application.watchEpisode(episode.getId())">
                                                         @if(episode.equals(season.getNextEpisode)) {
-                                                           Próximo a ser assistido! Episode @episode.getNumber(): @episode.getName()
+                                                           Próximo a ser assistido! Episódio @episode.getNumber(): @episode.getName()
                                                         }
                                                         @if(!episode.equals(season.getNextEpisode)) {
-                                                            Episode @episode.getNumber(): @episode.getName()
+                                                            Episódio @episode.getNumber(): @episode.getName()
                                                         }
                                                         <span class="pull-right">
                                                             <button class="btn btn-xs" type="submit">
@@ -104,7 +104,7 @@
                                             }
                                             @if(episode.isWatched()) {
                                                 <li class="done">
-                                                    Episode @episode.getNumber(): @episode.getName()
+                                                    Episódio @episode.getNumber(): @episode.getName()
                                                     <span class="pull-right">
                                                         <span class="glyphicon glyphicon-ok-circle"></span>
                                                     </span>
