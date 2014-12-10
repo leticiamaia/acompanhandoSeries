@@ -39,20 +39,14 @@
                             <br>
                             <ul class="list-group seasons">
                             @for(season <- show.getSeasons()) {
-                                <li class="list-group-item">
-                                    <div class="dropdown">
-                                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-                                            <span class="caret"></span>
-                                        </button>
-                                        Temporada @season.getNumber()
-                                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                                        @for(episode <- season.getEpisodes()) {
-                                            <li>Episídio @episode.getNumber(): @episode.getName</li>
-                                            <li role="presentation" class="divider"></li>
-                                        }
-                                        </ul>
-                                    </div>
+                                <li class="list-group-item" data-toggle="collapse" data-target="#episodes@season.getId()">
+                                    @season.getNumber()
                                 </li>
+                                    <div class="collapse" id="episodes@season.getId()">
+                                        @for(episode <- season.getEpisodes()) {
+                                            <li class="list-group-item">Episódio @episode.getNumber(): @episode.getName</li>
+                                        }
+                                    </div>
                             }
                             </ul>
                         </li>
@@ -68,11 +62,7 @@
                             <h4>@show.getName()</h4>
                             <ul class="list-group seasons">
                             @for(season <- show.getSeasons()) {
-                                <li class="list-group-item">
-                                    <div class="dropdown">
-                                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-                                            <span class="caret"></span>
-                                        </button>
+                                   <li class="list-group-item" data-toggle="collapse" data-target="#episodes@season.getId()">
                                         Temporada @season.getNumber():
                                         @if(season.getStatus == 0) {
                                             Nenhum Episódio assistido
@@ -83,10 +73,11 @@
                                         @if(season.getStatus == 2) {
                                             Assitido
                                         }
-                                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                                   </li>
+                                   <div class="collapse" id="episodes@season.getId()">
                                         @for(episode <- season.getEpisodes()) {
                                             @if(!episode.isWatched()) {
-                                                <li>
+                                                <li class="list-group-item">
                                                     <form method="post" action="@routes.Application.watchEpisode(episode.getId())">
                                                         @if(episode.equals(season.getNextEpisode)) {
                                                            Próximo a ser assistido! Episódio @episode.getNumber(): @episode.getName()
@@ -103,18 +94,15 @@
                                                 </li>
                                             }
                                             @if(episode.isWatched()) {
-                                                <li class="done">
+                                                <li class="list-group-item done">
                                                     Episódio @episode.getNumber(): @episode.getName()
                                                     <span class="pull-right">
                                                         <span class="glyphicon glyphicon-ok-circle"></span>
                                                     </span>
                                                 </li>
                                             }
-                                            <li role="presentation" class="divider"></li>
                                         }
-                                        </ul>
-                                    </div>
-                                </li>
+                                   </div>
                             }
                             </ul>
                         </li>
